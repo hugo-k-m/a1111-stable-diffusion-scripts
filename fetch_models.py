@@ -4,75 +4,85 @@ from subprocess import call
 from IPython.display import clear_output
 
 class model_downloads:
-    def checkpoint_dl(self, model_name, MODEL_LINK):
-        final_model_name = f'/notebooks/sd/stable-diffusion-webui/models/Stable-diffusion/{model_name}.safetensors'
-        model='/notebooks/sd/stable-diffusion-webui/models/Stable-diffusion/model.safetensors'
+  def checkpoint_dl(self, model_name, MODEL_LINK):
+    final_model_name = f'/content/drive/MyDrive/sd/stable-diffusion-webui/models/Stable-diffusion/{model_name}.safetensors'
+    # model='/content/gdrive/MyDrive/sd/stable-diffusion-webui/models/Stable-diffusion/model.safetensors'
 
-        if os.path.exists(final_model_name):
-            call('rm '+final_model_name, shell=True)
+    if os.path.exists(final_model_name):
+        call('rm '+final_model_name, shell=True)
 
-        if os.path.exists(model):
-            call('rm '+model, shell=True)
+    # if os.path.exists(model):
+    #     call('rm '+model, shell=True)
 
-        gdown.download(url=MODEL_LINK, output=model, quiet=False, fuzzy=True)
+    gdown.download(url=MODEL_LINK, output=final_model_name, quiet=False, fuzzy=True)
 
-        if os.path.exists(model):
-            call(
-                'mv ' + model + ' ' + final_model_name,
-                shell=True
-            )
+    if os.path.exists(final_model_name): # and os.path.getsize(lora) > 1810671599:
+        # call(
+        #     'mv ' + model + ' ' + final_model_name,
+        #     shell=True
+        # )
 
-            clear_output()
-            print('[1;32mModel downloaded.')
-        else:
-            print('[1;31mWrong link, check that the link is valid')
+        clear_output()
+        print('[1;32mModel downloaded.')
+    else:
+        print('[1;31mWrong link, check that the link is valid')
 
-        try:
-            model
-        except:
-            model="/notebooks/sd/stable-diffusion-webui/models/Stable-diffusion"
+    try:
+        final_model_name
+    except:
+        final_model_name="/content/drive/MyDrive/sd/stable-diffusion-webui/models/Stable-diffusion/"
 
-        return model
+    return final_model_name
 
-    def lora_dl(self, lora_name, LORA_LINK):
-        lora=f'/notebooks/sd/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/{lora_name}.safetensors'
+  def loradl(self, folder, lora_name, LORA_LINK, lycoris=False):
+    if folder == "addnet":
+      lora=f'/content/drive/MyDrive/sd/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora/{lora_name}.safetensors'
+    elif folder == "models" and lycoris:
+      lora=f'/content/drive/MyDrive/sd/stable-diffusion-webui/models/LyCORIS/{lora_name}.safetensors'
+    else:
+      lora=f'/content/drive/MyDrive/sd/stable-diffusion-webui/models/Lora/{lora_name}.safetensors'
 
-        if os.path.exists(lora):
-            call('rm '+lora, shell=True)
+    if os.path.exists(lora):
+      call('rm '+lora, shell=True)
 
-        gdown.download(url=LORA_LINK, output=lora, quiet=False, fuzzy=True)
+    gdown.download(url=LORA_LINK, output=lora, quiet=False, fuzzy=True)
 
-        if os.path.exists(lora):
-            clear_output()
-            print('[1;32mLora downloaded.')
-        else:
-            print('[1;31mWrong link, check that the link is valid')
+    # print(os.path.getsize(lora))
+    # print(os.path.exists(lora))
 
-        try:
-            lora
-        except:
-            lora="/notebooks/sd/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/lora"
+    if os.path.exists(lora): # and os.path.getsize(lora) > 1810671599:
+      clear_output()
+      print('[1;32mLora downloaded.')
+    else:
+      print('[1;31mWrong link, check that the link is valid')
 
-        return lora
+    try:
+      lora
+    except:
+      lora="/content/drive/MyDrive/sd/stable-diffusion-webui/models/Lora/"
 
+    return lora
 
-    def vae_dl(self, vae_name, VAE_LINK):
-        vae=f'/notebooks/sd/stable-diffusion-webui/models/VAE/{vae_name}.safetensors'
+  def controlnet_dl(self, controlnet_name, CONTROLNET_LINK):
+      controlnet = f'/content/drive/MyDrive/sd/stable-diffusion-webui/extensions/sd-webui-controlnet/models/{controlnet_name}.pth'
+  
+      if os.path.exists(controlnet):
+          call('rm ' + controlnet, shell=True)
+  
+      gdown.download(url=CONTROLNET_LINK, output=controlnet, quiet=False, fuzzy=True)
+  
+      if os.path.exists(controlnet):
+          clear_output()
+          print('\x1b[1;32mControlNet downloaded.')
+      else:
+          print('\x1b[1;31mWrong link, check that the link is valid')
+  
+      try:
+          controlnet
+      except:
+          controlnet = "/content/drive/MyDrive/sd/stable-diffusion-webui/extensions/sd-webui-additional-networks/models/controlnet"
+  
+      return controlnet
 
-        if os.path.exists(vae):
-            call('rm '+vae, shell=True)
-
-        gdown.download(url=VAE_LINK, output=vae, quiet=False, fuzzy=True)
-
-        if os.path.exists(vae):
-            clear_output()
-            print('[1;32mVAE downloaded.')
-        else:
-            print('[1;31mWrong link, check that the link is valid')
-
-        try:
-            vae
-        except:
-            vae="/notebooks/sd/stable-diffusion-webui/models/VAE"
-
-        return vae
+# Instantiate
+manage_models = model_downloads()
