@@ -64,7 +64,7 @@ class model_downloads:
     return lora
 
   def controlnet_dl(self, controlnet_name, CONTROLNET_LINK):
-      controlnet = f'/content/drive/MyDrive/sd/stable-diffusion-webui/extensions/sd-webui-controlnet/models/{controlnet_name}.pth'
+      controlnet = f'/content/drive/MyDrive/sd/stable-diffusion-webui/extensions/sd-webui-controlnet/models/{controlnet_name}.safetensors'
   
       if os.path.exists(controlnet):
           call('rm ' + controlnet, shell=True)
